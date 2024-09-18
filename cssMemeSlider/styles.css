@@ -30,27 +30,85 @@ body {
 
 .slide {
     min-width: 100%;
-    display: flex;
-    flex-direction: column;
+    position: relative;
 }
 
 .slide img {
     width: 100%;
     height: auto;
-}
-
-.slide p {
-    margin-top: 1rem;
-    font-size: 1rem;
-    text-align: left;
+    transition: transform 0.5s ease-in-out;
 }
 
 input[type="radio"] {
     display: none;
 }
 
-.controls {
+.text-controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 1rem;
+    width: 100%;
+    position: relative;
+}
+
+.text-container {
+    flex-grow: 1;
+    margin-right: 1rem;
+    position: relative;
+}
+
+.text-container p {
+    display: none;
+    margin: 0;
+    font-size: 1rem;
+    text-align: left;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Анимация текстов */
+#slide1:checked ~ .text-controls-container .text-container p:nth-child(1),
+#slide2:checked ~ .text-controls-container .text-container p:nth-child(2),
+#slide3:checked ~ .text-controls-container .text-container p:nth-child(3),
+#slide4:checked ~ .text-controls-container .text-container p:nth-child(4) {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Синхронизация движения изображения */
+#slide1:checked ~ .slides { transform: translateX(0); }
+#slide2:checked ~ .slides { transform: translateX(-100%); }
+#slide3:checked ~ .slides { transform: translateX(-200%); }
+#slide4:checked ~ .slides { transform: translateX(-300%); }
+
+/* Эффект появления картинки при активном слайде */
+#slide1:checked ~ .slides .slide:nth-child(1) img,
+#slide2:checked ~ .slides .slide:nth-child(2) img,
+#slide3:checked ~ .slides .slide:nth-child(3) img,
+#slide4:checked ~ .slides .slide:nth-child(4) img {
+    transform: scale(1);
+    opacity: 1;
+}
+
+#slide1:checked ~ .controls label:nth-child(1),
+#slide2:checked ~ .controls label:nth-child(2),
+#slide3:checked ~ .controls label:nth-child(3),
+#slide4:checked ~ .controls label:nth-child(4) {
+    background-color: #333;
+}
+
+/* Стартовые настройки для картинок */
+.slide img {
+    opacity: 0;
+    transform: scale(0.95); /* Немного уменьшено, чтобы плавно увеличиваться */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Контролы */
+.controls {
     display: flex;
     gap: 1rem;
 }
@@ -68,33 +126,28 @@ input[type="radio"] {
     background-color: #aaa;
 }
 
-#slide1:checked ~ .slides { transform: translateX(0); }
-#slide2:checked ~ .slides { transform: translateX(-100%); }
-#slide3:checked ~ .slides { transform: translateX(-200%); }
-#slide4:checked ~ .slides { transform: translateX(-300%); }
-
-#slide1:checked ~ .controls label:nth-child(1),
-#slide2:checked ~ .controls label:nth-child(2),
-#slide3:checked ~ .controls label:nth-child(3),
-#slide4:checked ~ .controls label:nth-child(4) {
-    background-color: #333;
-}
-
 @media (max-width: 768px) {
     .slider-container {
         padding: 10px;
     }
 
-    .slide p {
-        font-size: 0.9rem;
+    .text-controls-container {
+        flex-direction: column-reverse; /* Контролы будут над текстом */
+        align-items: center;
     }
 
     .controls {
-        bottom: 5px;
+        margin-bottom: 10px;
+        justify-content: center;
     }
 
     .controls label {
         width: 15px;
         height: 15px;
+    }
+
+    .text-container p {
+        font-size: 0.9rem;
+        text-align: center; /* Центрируем текст */
     }
 }
